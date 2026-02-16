@@ -1,0 +1,23 @@
+// for re assigning the worker on the assigned but not in progress task 
+
+
+// option for the worker to reject the task -> then then report will be unasssigned and status will be pending 
+then the admin could see the report and reassign the report 
+
+
+// notification system for each on the 
+// add the link in the otification to navigate to the corresponding report page (optional future improvement)
+
+worker-> if assigned 
+
+user -> if worker mark the report as completed then to verify send notification to the user
+
+// admin -> if any task is un assigned then notify the admin 
+            if the worker rejects the task then notify the admin 
+
+
+
+// more improvements -> in admin dashboard earch the task by the reportId , filter by worker, filter by user 
+
+
+// heap map of the reports / workers 
