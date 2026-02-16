@@ -17,6 +17,8 @@ yarn-error.log*
 # OS files
 .DS_Store
 
+.problem.txt
+.improvement.txt
 # Environment variables
 .env*
 !.env.example

@@ -1,7 +1,0 @@
-// some thime due NextAuth + App Router hydration mismatch issue useSession is not fetch in the client components
-so the api fetching is working good but whereever the useSession is used it is not working 
-// as the login  and signup button will be visible 
-
-// solution is to --->    REFRESH THE PAGE 
-
-// ISTEAD OF USING THE (!sesssion ) -> USE STATUS FOR RENDERING PF THE DATA
