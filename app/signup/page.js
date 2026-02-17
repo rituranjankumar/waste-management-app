@@ -53,7 +53,7 @@ const SignUpForm = () => {
 
     const role = watch("role");
 
-    /* -------- Location for Worker -------- */
+    /*   Location for Worker   */
     const requestLocation = () => {
         if (!navigator.geolocation) {
             toast.error("geo location not supported in your device")
@@ -91,7 +91,7 @@ const SignUpForm = () => {
         );
     };
 
-    /* -------- Submit -------- */
+    /*   Submit   */
     const onSubmit = async (data) => {
         if (data.role === "worker" && !location) {
             toast.error("Please add your location");
@@ -155,7 +155,7 @@ const SignUpForm = () => {
             </div>
 
             {/*   Highlights   */}
-            <div className="mb-6  max-md:hidden grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
+            <div className="mb-6  max-md:hidden grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                 <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-3">
                     <p className="font-medium">📍 Smart Assignment</p>
                     <p className="text-zinc-600 dark:text-zinc-400 text-xs mt-1">
@@ -175,7 +175,7 @@ const SignUpForm = () => {
 
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="w-full max-w-md space-y-4"
+                className="w-full max-md:px-4 max-w-md space-y-4"
             >
                 {/* Name */}
                 <div>
