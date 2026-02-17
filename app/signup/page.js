@@ -163,12 +163,7 @@ const SignUpForm = () => {
                     </p>
                 </div>
 
-                <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-3">
-                    <p className="font-medium">🤖 AI Detection</p>
-                    <p className="text-zinc-600 dark:text-zinc-400 text-xs mt-1">
-                        Waste type detected from images.
-                    </p>
-                </div>
+                 
 
                 <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-3">
                     <p className="font-medium">✅ Verified Pickup</p>
