@@ -24,29 +24,22 @@ The application uses a **single full-stack Next.js architecture**, where fronten
 
 ## 📸 Application Screenshots
 
-### Home Page
-![Home](screenshots/home.png)
+| Home | User Dashboard |
+|------|----------------|
+| ![](screenshots/home.png) | ![](screenshots/user-dashboard.png) |
 
-### User Dashboard
-![User Dashboard](screenshots/user-dashboard.png)
+| Worker Dashboard | Admin Dashboard |
+|------------------|----------------|
+| ![](screenshots/worker-dashboard.png) | ![](screenshots/admin-dashboard.png) |
 
-### Worker Dashboard
-![Worker Dashboard](screenshots/worker-dashboard.png)
+| Admin Analytics | Reports |
+|-----------------|---------|
+| ![](screenshots/admin-dashboard-2.png) | ![](screenshots/reports.png) |
 
-### Admin Dashboard
-![Admin Dashboard](screenshots/admin-dashboard.png)
+| Create Report | Status Tracking |
+|--------------|----------------|
+| ![](screenshots/report-waste.png) | ![](screenshots/report-status.png) |
 
-### Admin Analytics
-![Admin Dashboard 2](screenshots/admin-dashboard-2.png)
-
-### All Reports
-![Reports](screenshots/reports.png)
-
-### Create Waste Report
-![Report Waste](screenshots/report-waste.png)
-
-### Report Status Tracking
-![Report Status](screenshots/report-status.png)
 
 ## 🧠 Problem Solved
 
