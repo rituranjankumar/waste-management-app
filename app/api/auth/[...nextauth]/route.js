@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 
 import User from "@/models/UserModal";
 import { connectDB } from "@/lib/dbConnect";
+import { rateLimiter } from "@/lib/rateLimiter";
 
 export const authOptions = {
   providers: [
@@ -20,9 +21,16 @@ export const authOptions = {
         password: {},
       },
 
-      async authorize(credentials) {
+      async authorize(credentials,req) {
         await connectDB();
+         // console.log("request in creadential -> ",req)
+        //  rate limiter 
+        const allowed = await rateLimiter(req,"login",credentials.email,60,5)
 
+        if(!allowed)
+        {
+          throw new Error("Too many request ! please try after some time")
+        }
         const user = await User.findOne({ email: credentials.email });
         if (!user) throw new Error("User not found");
 

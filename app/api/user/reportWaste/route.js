@@ -5,6 +5,7 @@ import User from "@/models/UserModal"
 import WastePickup from "@/models/WastePickupModal"
 import { connectDB } from "@/lib/dbConnect";
  import Notification from "@/models/NotificationModal"
+import { rateLimiter } from "@/lib/rateLimiter";
 export async function POST(req) {
 
 
@@ -15,10 +16,26 @@ export async function POST(req) {
         return error;
     }
 
-    // connect  db
-     await   connectDB();
+   
      
     try {
+            const email = session?.user?.email
+            // rate limit
+            const allowed = await rateLimiter(req,"reportWaste",email,60,10);
+        
+        if(!allowed)
+        {
+          return Response.json({
+            success:false,
+            message:"Too many request !! please try after some time "
+          },{
+            status:429
+          })
+        }
+
+         // connect  db
+     await   connectDB();
+
         // prepare the data
         const formData = await req.formData();
 

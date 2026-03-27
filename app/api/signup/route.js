@@ -1,17 +1,31 @@
 
  
 import { connectDB } from "@/lib/dbConnect";
+import { rateLimiter } from "@/lib/rateLimiter";
 import User from "@/models/UserModal"
 
 import bcrypt from "bcrypt";
+import { success } from "zod";
  
 
 export async function POST(req) {
   try {
     await connectDB();
-
+     
     const { name, email, password, role, location = null } = await req.json();
+   
+    // rate limit
+    const allowed = await rateLimiter(req,"signup",email,60,3);
 
+if(!allowed)
+{
+  return Response.json({
+    success:false,
+    message:"Too many request !! please try after some time "
+  },{
+    status:429
+  })
+}
     const userExist = await User.findOne({ email });
 
     if (userExist) {

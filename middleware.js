@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function middleware(req) {
   console.log("MIDDLEWARE HIT ->", req.nextUrl.pathname);
+console.log("moddleware req -> ",req.headers.get("x-forwarded-for"));
+
   const token = await getToken({
   req,
   secret: process.env.NEXTAUTH_SECRET,
