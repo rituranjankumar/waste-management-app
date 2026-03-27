@@ -44,7 +44,8 @@ export default function AdminDashboardPage() {
     try {
       const res = await apiConnector("GET", "/api/admin/dashboard");
 
-      if (res.success) {
+      console.log("dashobard -> ",res)
+      if (res) {
         setOverview(res.section1);
         setStatusData(res.section2);
         setMonthlyVerified(res.section3.monthlyVerified);

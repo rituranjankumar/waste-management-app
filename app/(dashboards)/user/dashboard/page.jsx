@@ -13,6 +13,7 @@ import {
 import RecentReports from "@/components/user/RecentReports";
 import Skeleton from "@/components/skeleton";
 import WasteChart from "@/components/user/WasteChart";
+import { toast } from "sonner";
 
 const STATUS_ICONS = {
   Pending: Clock,

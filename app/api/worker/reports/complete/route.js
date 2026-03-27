@@ -4,13 +4,14 @@ import { uploadToCloudinary } from "@/lib/uploadAndDeleteToCloudinary";
 import WastePickup from "@/models/WastePickupModal";
 import { connectDB } from "@/lib/dbConnect";
 import Notification from "@/models/NotificationModal"
+import redis from "@/lib/redisConfig";
 export async function POST(req) {
   try {
     const { error, session } = await requireRole(["worker"]);
     if (error) return error;
 
     await connectDB();
-
+const workerId = session.user.id
     const formData = await req.formData();
 
     const reportId = formData.get("reportId");
@@ -62,7 +63,11 @@ export async function POST(req) {
       completedAt: new Date(),
       workerLocation: null, 
     };
-
+        // delete teh dat afrom the redis 
+       await redis.del(`worker-dashboard:${workerId}`);
+      await redis.del(`dashboard:${report.userId}`);
+      await redis.del("admin-dashboard");
+      
     await report.save();
       await Notification.create({
       recipientId: report.userId,     //   notify user

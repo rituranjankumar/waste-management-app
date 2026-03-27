@@ -3,19 +3,41 @@ import { NextResponse } from "next/server";
 import WastePickup from "@/models/WastePickupModal";
 import { connectDB } from "@/lib/dbConnect";
 import mongoose from "mongoose";
+import redis from "@/lib/redisConfig";
 
 export async function GET() {
+
+
+    try {
+
+   // Auth + role check
+    const { session, error } = await requireRole(["worker"]);
+    if (error) return error;
+        const workerId = session.user.id;
+
+            
+        
+        
+            const cacheKey = `worker-dashboard:${workerId}`
+        
+            const cachedData = await redis.get(cacheKey);
+        
+        
+            //  console.log("RAW CACHE ->", cachedData);
+            console.log("TYPE ->", typeof cachedData);
+        
+            if (cachedData) {
+              try {
+                return NextResponse.json(cachedData);
+              } catch (err) {
+                console.log("Corrupted cache, deleting...");
+                await redis.del(cacheKey);
+              }
+            }
     // Ensure DB connection
     await connectDB();
 
-    // Auth + role check
-    const { session, error } = await requireRole(["worker"]);
-    if (error) return error;
-
-    try {
-        const workerId = session.user.id;
-
-
+ 
         if (!mongoose.Types.ObjectId.isValid(workerId)) {
             return NextResponse.json(
                 { success: false, message: "Invalid worker id" },
@@ -155,8 +177,8 @@ export async function GET() {
 
         const data = dashboardData[0] || {};
 
-        return NextResponse.json(
-            {
+         
+          const response =  {
                 success: true,
                 reports,
                 StatusData: data.StatusData || [],
@@ -164,14 +186,13 @@ export async function GET() {
                 MonthlyData: data.MonthlyData || [],
                 TotalWaste: data.TotalWaste?.[0]?.totalWeight || 0,
 
-            },
-            {
-                status: 200,
-                headers: {
-                    "Cache-Control": "private, max-age=30, stale-while-revalidate=2",
-                },
             }
-        );
+            await redis.set(cacheKey,response,{
+                ex:60
+            })
+           
+            return NextResponse.json(response,{status:200})
+         
     } catch (err) {
         console.error("Error fetching worker dashboard data:", err);
 

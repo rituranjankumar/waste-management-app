@@ -3,17 +3,36 @@ import { NextResponse } from "next/server";
 import WastePickup from "@/models/WastePickupModal";
 import { connectDB } from "@/lib/dbConnect";
 import mongoose from "mongoose";
-
+import redis from "@/lib/redisConfig";
 export async function GET() {
-    // Ensure DB connection
-    await connectDB();
 
-    // Auth + role check
-    const { session, error } = await requireRole(["user"]);
-    if (error) return error;
 
     try {
-        const userId = session.user.id;
+        // Auth + role check
+        const { session, error } = await requireRole(["user"]);
+        if (error) return error;
+        const userId = session?.user?.id;
+        // Ensure DB connection
+
+        const cacheKey = `dashboard:${userId}`
+
+        const cachedData = await redis.get(cacheKey);
+
+
+      //  console.log("RAW CACHE ->", cachedData);
+        console.log("TYPE ->", typeof cachedData);
+
+        if (cachedData) {
+            try {
+                return NextResponse.json(cachedData);
+            } catch (err) {
+                console.log("Corrupted cache, deleting...");
+                await redis.del(cacheKey);
+            }
+        }
+        await connectDB();
+
+
 
         // Fetch user reports
         const reports = await WastePickup.find({ userId: userId }).select("description pickupLocation.address wasteType imageUrl status assignedAt")
@@ -67,20 +86,24 @@ export async function GET() {
                 }
             }
         ]);
-        return NextResponse.json({
+
+        // set the redis cache reports statusdata wastetypedata
+        const response = {
             success: true,
             reports: reports,
             StatusData: dashboardData[0].StatusData,
             WasteTypeData: dashboardData[0].WasteTypeData
-
-        }, {
-            status: 200,
-            headers: {
-                "Cache-Control": "private, max-age=30, stale-while-revalidate=2",
-            },
         }
 
-        );
+       await redis.set(cacheKey, response, {
+  ex: 60
+});
+            const ttl = await redis.ttl(cacheKey);
+            console.log("TTL AFTER SET ->", ttl);
+        return NextResponse.json(response, { status: 200 })
+
+
+
     } catch (err) {
         console.error("Error fetching user dashboard data :", err);
 
