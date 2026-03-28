@@ -213,6 +213,76 @@ The application will run locally on the default Next.js development port.
 
 ---
 
+---
+
+## ⚡ Redis Integration (Caching & Rate Limiting)
+
+To enhance performance and security, EcoClean integrates **Redis** for caching and rate limiting.
+
+---
+
+### 🚫 Rate Limiting (Login & Signup Protection)
+
+Redis is used to prevent abuse of authentication endpoints by limiting repeated requests.
+
+#### 🔹 How it works:
+- Each request is tracked using a unique key (IP or user identifier)
+- Request count is incremented using Redis `INCR`
+- A time window is set using `EXPIRE`
+- If request limit exceeds threshold → request is blocked
+
+#### 🔹 Example Use Case:
+- Max **5 login/signup attempts per minute**
+- Prevents:
+  - Brute-force attacks  
+  - Spam account creation  
+  - Server overload  
+
+---
+
+### ⚡ Dashboard Caching (Performance Optimization)
+
+Admin dashboards and analytics involve heavy MongoDB aggregation queries.  
+Redis is used to cache this data and improve response time.
+
+#### 🔹 What is cached:
+- Admin dashboard analytics  
+- Monthly reports  
+- Worker performance data  
+  
+
+#### 🔹 Caching Strategy:
+- Data is stored with a **TTL (Time-To-Live)**
+- Cached response is returned if available
+- Cache is invalidated or refreshed when new data is added
+
+#### 🔹 Benefits:
+- ⚡ Faster dashboard load times  
+- 📉 Reduced database load  
+- 🚀 Improved scalability  
+
+---
+
+### 🔁 Cache Flow
+
+Request → Check Redis Cache  
+→ Cache Hit → Return Cached Data  
+→ Cache Miss → Fetch from MongoDB → Store in Redis → Return Response  
+
+---
+
+### 🧠 Why Redis?
+
+- In-memory storage → ultra-fast performance  
+- Ideal for real-time systems  
+- Supports TTL-based expiration  
+- Scales easily with production systems  
+
+ 
+
+ 
+
+ 
 ## ⭐ Key Highlights
 
 - Full-stack Next.js architecture
