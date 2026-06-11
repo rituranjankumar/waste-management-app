@@ -51,7 +51,9 @@ const googleLogin = async () => {
   const toastId = toast.loading("Redirecting to Google...");
 
   try {
-   const res =  await signIn("google", { redirect:false });
+   await signIn("google", {
+  callbackUrl: `${window.location.origin}`,
+});
   // console.log("response form the login by google -> ",res)
   } catch (err) {
     toast.dismiss(toastId);
