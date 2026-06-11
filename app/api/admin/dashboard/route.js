@@ -15,8 +15,12 @@ export async function GET(req) {
 
     // same admin key for global admins
     const cacheKey = "admin-dashboard";
-
-    const cachedData = await redis.get(cacheKey);
+let cachedData=null
+    try {
+  cachedData = await redis.get(cacheKey);
+} catch (err) {
+  console.error("Redis Error:", err);
+}
 
 
     //  console.log("RAW CACHE ->", cachedData);
