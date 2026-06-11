@@ -16,8 +16,13 @@ export async function GET() {
 
         const cacheKey = `dashboard:${userId}`
 
-        const cachedData = await redis.get(cacheKey);
+        let cachedData = null;
 
+try {
+  cachedData = await redis.get(cacheKey);
+} catch (err) {
+  console.error("Redis Error:", err);
+}
 
       //  console.log("RAW CACHE ->", cachedData);
         console.log("TYPE ->", typeof cachedData);
